@@ -7,11 +7,16 @@
 #include <deque>
 #include <vector>
 #include <queue>
+#include <time.h>
 #include "deploy.h"
 
 #define N 2000
 using namespace std;
 
+inline int random_int(int range){
+	srand((int)time(NULL));
+	return rand()%range;
+}
 
 class mcmf_network{
 	private:
@@ -32,6 +37,8 @@ class mcmf_network{
 	public:
 		std::vector<int> Graph[N]; //图
 		std::vector<Edge> edges; //边集
+		std::vector<std::vector<int>> final_path; //最佳路径
+		std::vector<int> servers_init; //初始服务器位置，直连到所有消费节点
 
 		int num_edge;
 		int num_network;
@@ -45,4 +52,8 @@ class mcmf_network{
 
 		void reset_loc();
 		int min_cost(std::vector<int> & servers);
+		int find_path(std::vector<int> & path, int node, int min_flow, int total_flow);
+		void print_path();
+		void best_init();
+		int get_neighbor(int node);
 };

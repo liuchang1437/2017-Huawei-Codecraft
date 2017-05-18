@@ -79,6 +79,7 @@ void mcmf_network::load_graph(char * topo[MAX_EDGE_NUM], int line_num){
 	//Line n + 1: 消费节点ID 相连网络节点ID 视频带宽消耗需求
 	for(int i = 0; i < num_consumer; i++){
 		sscanf(topo[5 + num_edge + i], "%d %d %d", &src, &des, &cap);
+		servers_init.push_back(des);
 		add_edge(des, src + num_network, cap, 0, 0); //网络节点 -> 消费节点
 		add_edge(src + num_network, super_t, cap, 0, 0); //消费节点 -> 超级汇点
 		flow_requirement += cap; //消耗总需求
@@ -111,12 +112,100 @@ int mcmf_network::min_cost(std::vector<int> & servers){
 		add_edge(super_s, servers[i], INF, 0, 0); //超级源点->服务器
 	}
 
-	while(spfa(super_s, super_t, flow, cost));
-	printf("flow = %d\n", flow);
-	printf("flow_requirement = %d\n", flow_requirement);
+	while(spfa(super_s, super_t, flow, cost)); //spfa
+	//printf("flow = %d\n", flow);
+	//printf("flow_requirement = %d\n", flow_requirement);
 	if(flow < flow_requirement){
 		return -1;
 	}
 	cost += Graph[super_s].size() * cost_server; //Calculate total cost
 	return cost;
+}
+
+int mcmf_network::find_path(std::vector<int> & path, int node, int min_flow, int total_flow){ //用dfs找到一条路径
+	if(visit[node] == 1){
+		return 0;
+	}
+	else if(node >= num_network && node < super_s){ //dfs搜索到消费节点
+		final_path.push_back(path); //将路径加入到结果中
+		final_path.back().push_back(node - num_network); //在末尾添加消费节点ID和flow
+		final_path.back().push_back(min_flow);
+		return min_flow;
+	}
+
+	size_t i;
+	visit[node] = 1; //搜索网络点
+	if(node != super_s){
+		path.push_back(node); //将每次搜索的网络点加入到path
+	}
+	int tmp = total_flow;
+	for(i = 0; i < Graph[node].size(); i++){ //DFS
+		Edge &e = edges[Graph[node][i]];
+		if(e.flow > 0){ //只检查flow大于0的边
+			int v = e.des; //往后搜索
+			if(visit[v] != 1){
+				if(total_flow > 0){ //该点的flow还有剩余
+					int return_flow = find_path(path, v, min(min_flow, min(total_flow, e.flow)), min(total_flow, e.flow));
+					e.flow = e.flow - return_flow; //更新flow
+					total_flow = total_flow - return_flow;
+				}
+				else{
+					break;
+				}
+			}
+		}
+	}
+
+	visit[node] = 0; //搜索完后取消标记，因为可能存在重复的路径
+	path.pop_back();
+	return tmp; //该点的后续节点已搜索完毕，返回total_flow跟之前的相减使得flow为0
+}
+
+void mcmf_network::print_path(){
+	memset(visit,0,sizeof(visit));
+	std::vector<int> path;
+	find_path(path, super_s, INF, INF);
+
+	unsigned int i,j;
+	for(i = 0; i < final_path.size(); i++){
+		for(j = 0; j < final_path[i].size(); j++){
+			printf("%d ", final_path[i][j]);
+		}
+		printf("\n");
+	}
+}
+
+void mcmf_network::best_init(){ //当每个服务器与消费节点直连，获得最佳初始值
+	int cost = num_consumer * cost_server;
+	for(int i = 0; i < num_consumer; i++){
+		int tmp = servers_init[0];
+		std::vector<int>::iterator loc = servers_init.begin() + 0;
+		servers_init.erase(loc);
+		if(min_cost(servers_init) != -1 && min_cost(servers_init) < cost){
+			continue;
+		}
+		else{
+			servers_init.push_back(tmp);
+		}
+	}
+	printf("servers_init is \n");
+	for(unsigned int i = 0; i < servers_init.size(); i++){
+		printf("%d ", servers_init[i]);
+	}
+	printf("\n");
+	printf("best init cost is %d\n", cost);
+}
+
+int mcmf_network::get_neighbor(int node){
+	//printf("the number of neighbor is %d\n", Graph[node].size());
+	//for(unsigned int i = 0; i < Graph[node].size(); i++){
+	//	printf("%d th neighbor is %d -> %d\n", i, edges[Graph[node][i]].src, edges[Graph[node][i]].des);
+	//}
+	int v = random_int(Graph[node].size());
+	if(edges[Graph[node][v]].des == node){
+		return edges[Graph[node][v]].src;
+	}
+	else{
+		return edges[Graph[node][v]].des;
+	}
 }
