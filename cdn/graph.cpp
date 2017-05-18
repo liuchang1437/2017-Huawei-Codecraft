@@ -1,4 +1,4 @@
-#include "max_flow_min_cut.h"
+#include "graph.h"
 
 #define INF 0x3f3f3f3f
 
