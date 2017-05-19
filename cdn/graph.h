@@ -41,6 +41,7 @@ class mcmf_network{
 		std::vector<Edge> edges; //边集
 		std::vector<std::vector<int>> final_path; //最佳路径
 		std::vector<int> servers_init; //初始服务器位置，直连到所有消费节点
+		std::vector<char> output_path;
 
 		int num_edge;
 		int num_network;

@@ -30,22 +30,23 @@ extern Random myrand;
 
 class Chromosome{
 private:
-	int fitness;
+	double fitness;
 	double probability; // probability used in roulette
-	unsigned length; // length of gene
+	int length; // length of gene
+	int cost;
 	bitset<MAX_SERVER> gene;
 	
 
 public:		
-	Chromosome(): length(0), fitness(0), probability(0){}
+	//Chromosome(): length(0), fitness(0), probability(0), cost(0){}
 	
-	void set_gene(unsigned len, vector<int> gene_obj); // set gene with gene_obj
-	void init_random(unsigned len); // initialize gene randomly.
+	void set_gene(int len, vector<int> gene_obj); // set gene with gene_obj
+	void init_random(int len); // initialize gene randomly.
 
-	inline void set_fitness(int f){
+	inline void set_fitness(double f){
 		this->fitness = f;
 	}
-	inline int get_fitness(){
+	inline double get_fitness(){
 		return this->fitness;
 	}
 	inline void set_probability(double p){
@@ -54,7 +55,13 @@ public:
 	inline double get_probability(){
 		return this->probability;
 	}
-	inline int gene_at(unsigned pos){
+	inline void set_cost(int c){
+		this->cost = c;
+	}
+	inline int get_cost(){
+		return this->cost;
+	}
+	inline int gene_at(int pos){
 		return this->gene[pos];
 	}
 	vector<int> get_server();
@@ -73,7 +80,7 @@ public:
         }		
     }
 	inline void mutate(){
-        unsigned pos = myrand.random_int(0,this->length-1);
+        int pos = myrand.random_int(0,this->length-1);
 #ifdef _DEBUG
     std::cout << "Mutate: " << pos <<endl;
 #endif
@@ -82,6 +89,8 @@ public:
 	inline void operator=(const Chromosome &other){ // copy operation
         this->length = other.length;
         this->fitness = other.fitness;
+		this->probability = other.probability;
+		this->cost = other.cost;
         this->gene = other.gene;
     }
 				
