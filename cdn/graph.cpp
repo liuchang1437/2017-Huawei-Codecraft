@@ -175,6 +175,36 @@ void mcmf_network::print_path(){
 	}
 }
 
+char* mcmf_network::write_path(){
+	final_path.clear();
+	memset(visit,0,sizeof(visit));
+	std::vector<int> path;
+	find_path(path, super_s, INF, INF);
+	//char huanghangfu = "\n";
+	char buf[15];
+	int ret = snprintf(buf, sizeof(buf), "%d\n\n", (int)final_path.size());
+	for(int i = 0; i < ret; i++){
+		output_path.push_back(buf[i]);
+	}
+
+	unsigned int i,j;
+	for(i = 0; i < final_path.size(); i++){
+		for(j = 0; j < final_path[i].size(); j++){
+			//printf("%d ", final_path[i][j]);
+			ret = snprintf(buf, sizeof(buf), "%d ", final_path[i][j]);
+			for(int i = 0; i < ret; i++){
+				output_path.push_back(buf[i]);
+			}
+		}
+		output_path.push_back('\n');
+	}
+	char * return_buf = (char*)malloc(sizeof(char) * (output_path.size()));
+	for(i = 0; i < output_path.size(); i++){
+		return_buf[i] = output_path[i];
+	}
+	return return_buf;
+}
+
 void mcmf_network::best_init(){ //当每个服务器与消费节点直连，获得最佳初始值
 	int cost = num_consumer * cost_server;
 	for(int i = 0; i < num_consumer; i++){

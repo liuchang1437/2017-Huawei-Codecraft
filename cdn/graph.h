@@ -56,6 +56,7 @@ class mcmf_network{
 		int min_cost(std::vector<int> & servers);
 		int find_path(std::vector<int> & path, int node, int min_flow, int total_flow);
 		void print_path();
+		char* write_path();
 		void best_init();
 		int get_neighbor(int node);
 };
