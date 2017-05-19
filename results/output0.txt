@@ -1,0 +1,10 @@
+******************** Parameters ********************
+Initial temperature: 20
+Decay Factor: 0.99
+Cross over probability: 0.5
+Mutation probability: 0.15
+
+******************** Results ********************
+Final temperature: 0.0991774
+Iteration: 528
+Best cost: 2042
