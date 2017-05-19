@@ -9,7 +9,7 @@
 
 using namespace std;
 
-const int MAX_SERVER=1000;
+const int MAX_SERVER=1005;
 
 class Random{
 	private:

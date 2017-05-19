@@ -57,6 +57,7 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 	mcmf.best_init();
 	vector<int> direct_conn = mcmf.servers_init;// get runed servers that directly connected to consumers
 	int num_server = mcmf.num_network; // get number of servers
+	cout << "number of servers: " << num_server << endl;
 	vector<Chromosome> population = this->init_population(num_server,direct_conn);
 	Chromosome best = population[0]; // minimum cost
 	best.set_cost(mcmf.min_cost(direct_conn));

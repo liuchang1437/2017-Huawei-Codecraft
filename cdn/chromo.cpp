@@ -35,8 +35,16 @@ vector<int> Chromosome::get_server(){ // get chosen servers
 
 vector<int> Chromosome::get_neighbor(mcmf_network mcmf){ // get neighbor
     vector<int> server = this->get_server(); 
-    int chosen = server[myrand.random_int(0,server.size()-1)]; // size - 1 !!!!!!!!!!!!!!!!!!!
+    int chosen_index = myrand.random_int(0,server.size()-1);
+    //cout << "chosen index: "<< chosen_index <<endl;
+    int chosen = server[chosen_index]; // size - 1 !!!!!!!!!!!!!!!!!!!
     this->gene.reset(chosen);
-    this->gene.set(mcmf.get_neighbor(chosen)); 
+    //cout << "chosen: "<< chosen<<endl;
+    int neighbor;
+    do{
+        neighbor = mcmf.get_neighbor(chosen);
+    } while(neighbor >= mcmf.num_network);
+    //cout << "neighbor: " << neighbor << endl;
+    this->gene.set(neighbor); 
     return this->get_server();
 }  
