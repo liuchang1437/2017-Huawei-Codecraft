@@ -201,6 +201,8 @@ char* mcmf_network::write_path(){
 	char * return_buf = (char*)malloc(sizeof(char) * (output_path.size()));
 	for(i = 0; i < output_path.size(); i++){
 		return_buf[i] = output_path[i];
+		if(i == output_path.size() - 1)
+            return_buf[i] = '\0';
 	}
 	return return_buf;
 }
