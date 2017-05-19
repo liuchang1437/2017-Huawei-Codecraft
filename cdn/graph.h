@@ -53,8 +53,8 @@ class mcmf_network{
 		void load_graph(char * topo[MAX_EDGE_NUM], int line_num);
 		bool spfa(int s, int t, int &flow, int &cost);
 
-		void reset_loc();
-		int min_cost(std::vector<int> & servers);
+		inline void reset_loc();
+		inline int min_cost(std::vector<int> & servers);
 		int find_path(std::vector<int> & path, int node, int min_flow, int total_flow);
 		void print_path();
 		char* write_path();

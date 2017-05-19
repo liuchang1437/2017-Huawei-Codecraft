@@ -87,7 +87,7 @@ void mcmf_network::load_graph(char * topo[MAX_EDGE_NUM], int line_num){
 }
 
 
-void mcmf_network::reset_loc(){
+inline void mcmf_network::reset_loc(){
 	size_t i;
 	for(i = 0; i < Graph[super_s].size(); i++){
 		int edge_num = Graph[super_s][i];
@@ -102,7 +102,7 @@ void mcmf_network::reset_loc(){
 	}
 }
 
-int mcmf_network::min_cost(std::vector<int> & servers){
+inline int mcmf_network::min_cost(std::vector<int> & servers){
 	int cost = 0;
 	int flow = 0;
 
@@ -213,8 +213,9 @@ void mcmf_network::best_init(){ //当每个服务器与消费节点直连，获�
 		int tmp = servers_init[0];
 		std::vector<int>::iterator loc = servers_init.begin() + 0;
 		servers_init.erase(loc);
-		if(min_cost(servers_init) != -1 && min_cost(servers_init) < cost){
-			cost = min_cost(servers_init);
+		int cost_tmp = min_cost(servers_init);
+		if(cost_tmp != -1 && cost_tmp < cost){
+			cost = cost_tmp;
 			continue;
 		}
 		else{
@@ -234,7 +235,7 @@ int mcmf_network::get_neighbor(int node){
 	//for(unsigned int i = 0; i < Graph[node].size(); i++){
 	//	printf("%d th neighbor is %d -> %d\n", i, edges[Graph[node][i]].src, edges[Graph[node][i]].des);
 	//}
-	int v = random_int2(Graph[node].size());
+	int v = random_int2(Graph[node].size()-num_consumer);
 	if(edges[Graph[node][v]].des == node){
 		return edges[Graph[node][v]].src;
 	}
