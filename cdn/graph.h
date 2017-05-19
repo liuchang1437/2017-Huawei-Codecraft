@@ -1,3 +1,5 @@
+#ifndef _GRAPH_
+#define _GRAPH_
 #include <cstdio>
 #include <assert.h>
 #include <cstring>
@@ -13,7 +15,7 @@
 #define N 2000
 using namespace std;
 
-inline int random_int(int range){
+inline int random_int2(int range){
 	srand((int)time(NULL));
 	return rand()%range;
 }
@@ -57,3 +59,4 @@ class mcmf_network{
 		void best_init();
 		int get_neighbor(int node);
 };
+#endif
