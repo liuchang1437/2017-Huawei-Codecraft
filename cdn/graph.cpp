@@ -235,7 +235,7 @@ int mcmf_network::get_neighbor(int node){
 	//for(unsigned int i = 0; i < Graph[node].size(); i++){
 	//	printf("%d th neighbor is %d -> %d\n", i, edges[Graph[node][i]].src, edges[Graph[node][i]].des);
 	//}
-	int v = random_int2(Graph[node].size()-num_consumer);
+	int v = random_int2(Graph[node].size());
 	if(edges[Graph[node][v]].des == node){
 		return edges[Graph[node][v]].src;
 	}

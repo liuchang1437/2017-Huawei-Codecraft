@@ -12,6 +12,7 @@
 #include <time.h>
 #include "deploy.h"
 
+#define INF 0x3f3f3f3f
 #define N 2000
 using namespace std;
 
