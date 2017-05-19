@@ -53,8 +53,41 @@ class mcmf_network{
 		void load_graph(char * topo[MAX_EDGE_NUM], int line_num);
 		bool spfa(int s, int t, int &flow, int &cost);
 
-		inline void reset_loc();
-		inline int min_cost(std::vector<int> & servers);
+		inline void reset_loc(){
+			size_t i;
+			for(i = 0; i < Graph[super_s].size(); i++){
+				int edge_num = Graph[super_s][i];
+				Graph[edges[edge_num].des].pop_back(); //在图中，删除与超级源点相连的服务器的边
+			}
+			for(i = Graph[super_s].size() * 2; i > 0; i--){
+				edges.pop_back(); //在边集中，删除超级源点与服务器之间的边
+			}
+			Graph[super_s].clear(); //在图中，删除超级源点连出去的边
+			for(i = 0; i < edges.size(); i++){
+				edges[i].flow = 0; //重置flow
+			}
+		}
+		
+		inline int min_cost(std::vector<int> & servers){
+			int cost = 0;
+			int flow = 0;
+
+			size_t i;
+			reset_loc(); //重置服务器位置
+			for(i = 0; i < servers.size(); i++){
+				add_edge(super_s, servers[i], INF, 0, 0); //超级源点->服务器
+			}
+
+			while(spfa(super_s, super_t, flow, cost)); //spfa
+			//printf("flow = %d\n", flow);
+			//printf("flow_requirement = %d\n", flow_requirement);
+			if(flow < flow_requirement){
+				return -1;
+			}
+			cost += Graph[super_s].size() * cost_server; //Calculate total cost
+			return cost;
+		}
+
 		int find_path(std::vector<int> & path, int node, int min_flow, int total_flow);
 		void print_path();
 		char* write_path();

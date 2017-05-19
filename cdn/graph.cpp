@@ -86,7 +86,7 @@ void mcmf_network::load_graph(char * topo[MAX_EDGE_NUM], int line_num){
 	}
 }
 
-
+/*
 inline void mcmf_network::reset_loc(){
 	size_t i;
 	for(i = 0; i < Graph[super_s].size(); i++){
@@ -121,7 +121,7 @@ inline int mcmf_network::min_cost(std::vector<int> & servers){
 	cost += Graph[super_s].size() * cost_server; //Calculate total cost
 	return cost;
 }
-
+*/
 int mcmf_network::find_path(std::vector<int> & path, int node, int min_flow, int total_flow){ //用dfs找到一条路径
 	if(visit[node] == 1){
 		return 0;
