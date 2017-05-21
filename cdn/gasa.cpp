@@ -89,6 +89,11 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 			if(population[i].get_cost() < best.get_cost()){
 				cout << "Best changed: "<< best.get_cost() << " -> " << population[i].get_cost() << endl;
 				best = population[i];
+				vector<int> best_server_tmp = best.get_server();
+				for(decltype(best_server_tmp.size()) j=0; j!=best_server_tmp.size(); ++j){
+					cout<<best_server_tmp[j]<<", ";
+				}
+				cout << endl;
 			}
 		} /* simulated annealing end */
 		// vector<int> tmp_best_servers = best.get_server();
@@ -147,8 +152,12 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 	std::cout << "Final temperature: "<< this->temperature << std::endl;
 	std::cout << "Iteration: "<< iteration << std::endl;
 	std::vector<int> best_server = best.get_server();
-	std::cout << "Best cost: " << best.get_cost() << std::endl;
-	mcmf.min_cost(best_server);
+	for(decltype(best_server.size()) j=0; j!=best_server.size(); ++j){
+		cout<<best_server[j]<<", ";
+	}
+	cout << endl;
+	std::cout << "Best cost: " << mcmf.min_cost(best_server) << std::endl;
+	//mcmf.min_cost(best_server);
 	//vector<int> pop_server = population[0].get_server();
 	//std::cout << "population[0] cost: " << mcmf.min_cost(pop_server) << std::endl;
 	return mcmf.write_path();
