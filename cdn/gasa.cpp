@@ -73,7 +73,8 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 			if(server_cost==-1){
 				continue;
 			}
-			vector<int> neigbour = population[i].get_neighbor(mcmf);
+			Chromosome neigbour_chrome = population[i];
+			vector<int> neigbour = neigbour_chrome.get_neighbor(mcmf);
 			int neigbour_cost = mcmf.min_cost(neigbour);
 			if(neigbour_cost!=-1){
 				double delta_cost = neigbour_cost - server_cost;
@@ -88,12 +89,15 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 			}
 			if(population[i].get_cost() < best.get_cost()){
 				cout << "Best changed: "<< best.get_cost() << " -> " << population[i].get_cost() << endl;
+				//vector<int> population_server = population[i].get_server();
+				//cout << "Population now: " << mcmf.min_cost(population_server) << endl;
+				//cout << "neigour cost: " << neigbour_cost << endl;
 				best = population[i];
-				//vector<int> best_server_tmp = best.get_server();
-				//for(decltype(best_server_tmp.size()) j=0; j!=best_server_tmp.size(); ++j){
-				//	cout<<best_server_tmp[j]<<", ";
-				//}
-				//cout << endl;
+			//	vector<int> best_server_tmp = best.get_server();
+			//	for(decltype(best_server_tmp.size()) j=0; j!=best_server_tmp.size(); ++j){
+			//		cout<<best_server_tmp[j]<<", ";
+			//	}
+			//	cout << endl;
 			}
 		} /* simulated annealing end */
 		// vector<int> tmp_best_servers = best.get_server();
