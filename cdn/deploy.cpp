@@ -6,11 +6,11 @@
 //你要完成的功能总入口
 void deploy_server(char * topo[MAX_EDGE_NUM], int line_num,char * filename)
 {
-	int max_population = 26;
+	int max_population = 10;
 	double init_temperature = 20;
 	double decay_factor = 0.99;
-	double cross_probability = 0.5;
-	double mutate_probability = 0.15;
+	double cross_probability = 0.9;
+	double mutate_probability = 0.9;
 
 	GASA program(init_temperature, max_population);
 	

@@ -87,10 +87,12 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 				population[i].set_cost(server_cost);
 			}
 			if(population[i].get_cost() < best.get_cost()){
+				cout << "Best changed: "<< best.get_cost() << " -> " << population[i].get_cost() << endl;
 				best = population[i];
 			}
 		} /* simulated annealing end */
-
+		// vector<int> tmp_best_servers = best.get_server();
+		// cout << mcmf.min_cost(tmp_best_servers) << endl;
 		/* gene algorithm */
 		/* select next generation by roulette. */
 		int cost_min = best.get_cost();
@@ -130,19 +132,10 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 				population[i].mutate();
 			}
 		}
-		
-		for(decltype(population.size()) i=0; time_out && i<population.size(); ++i){
-			vector<int> tmp_servers = population[i].get_server();
-			int tmp_cost = mcmf.min_cost(tmp_servers);
-			population[i].set_cost(tmp_cost);
-			if(tmp_cost!=-1 && (tmp_cost < best.get_cost())){
-				best = population[i];
-			}
-		}
 
-		vector<int> best_tmp_server = best.get_server();
 		this->temperature *= decay_factor;
 		iteration += 1;
+		//cout << "Loop end" << endl;
 	}
 	std::cout << "******************** Parameters ********************"<< std::endl;
 	std::cout << "Initial temperature: "<< init_temp << std::endl;
@@ -154,6 +147,9 @@ char* GASA::process(char * topo[MAX_EDGE_NUM], int line_num, double decay_factor
 	std::cout << "Final temperature: "<< this->temperature << std::endl;
 	std::cout << "Iteration: "<< iteration << std::endl;
 	std::vector<int> best_server = best.get_server();
-	std::cout << "Best cost: " << mcmf.min_cost(best_server) << std::endl;
+	std::cout << "Best cost: " << best.get_cost() << std::endl;
+	mcmf.min_cost(best_server);
+	//vector<int> pop_server = population[0].get_server();
+	//std::cout << "population[0] cost: " << mcmf.min_cost(pop_server) << std::endl;
 	return mcmf.write_path();
 }
